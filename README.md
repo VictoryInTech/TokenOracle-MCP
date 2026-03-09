@@ -1,6 +1,12 @@
 # TokenOracle MCP
 
-Token Oracle is a Model Context Protocol (MCP) server that estimates, compares, and controls LLM API costs before agents spend tokens. It exposes nine tools, four read-only Resources, and a cost_analysis_workflow Prompt template. All tools are read-only and idempotent — no external LLM API calls are made at query time. Pricing data is sourced from the LiteLLM community dataset (model_prices_and_context_window.json) and cached in-memory with a bundled snapshot fallback.
+Token Oracle is a Model Context Protocol (MCP) server that estimates, compares, and controls LLM API costs before agents spend tokens. It exposes nine tools, four read-only Resources, and a cost_analysis_workflow Prompt template. It uses a proprietary pricing algorithm without a backing LLM to ensure deterministic budget workflows. 
+
+
+Designed to work with agent swarms backing one or zero employee companies, Token Oracle acts as a tiny CFO within your OpenClaw swarm keeping spend down and making suggestions to improve promptings.
+
+
+Save them tokens, call Token Oracle today!
 
 **MCP tools exposed:**
 
@@ -29,7 +35,7 @@ Goal: Run 500 product description generation tasks. Budget $50/mo, current spend
 Decision: Use deepseek-v3. Save $0.425 vs gpt-4o-mini.
 
 **Pricing:**
-- Free: 100 API calls/day, all five tools via hosted HTTP endpoint, no credit card
+- Free: 100 API calls/day, all hosted tools via the remote endpoint, no credit card
 - Pro ($29/mo): Unlimited calls, track_spend tool (persisted cost ledger per API key), priority throughput, spend attribution per agent/task/session
 
 **Contact:** info@guffeyholdings.com
@@ -59,25 +65,37 @@ Direct remote configuration:
 
 For local clients that still expect an npm-installed stdio server, use `token-oracle-mcp`.
 
+One-time login flow:
+
+```bash
+npx -y token-oracle-mcp login
+```
+
+That validates your hosted API key and stores it locally for later bridge launches. After login, the MCP config does not need to inject `TOKEN_ORACLE_API_KEY`.
+
 ```json
 {
   "mcpServers": {
     "token-oracle": {
       "command": "npx",
-      "args": ["-y", "token-oracle-mcp"],
-      "env": {
-        "TOKEN_ORACLE_API_KEY": "${TOKEN_ORACLE_API_KEY}"
-      }
+      "args": ["-y", "token-oracle-mcp"]
     }
   }
 }
 ```
 
+If you prefer stateless setup, keep passing `TOKEN_ORACLE_API_KEY` as an environment variable instead.
+
 Optional bridge environment variables:
 
-- `TOKEN_ORACLE_API_KEY`: required hosted API key
+- `TOKEN_ORACLE_API_KEY`: optional hosted API key; overrides any stored credential
 - `TOKEN_ORACLE_BASE_URL`: override for the remote endpoint; defaults to `https://mcp.guffeyholdings.com/TokenOracle`
 - `TOKEN_ORACLE_SUBJECT`: optional end-user subject forwarded as `X-Token-Oracle-Subject`
+
+Additional bridge commands:
+
+- `npx -y token-oracle-mcp login`: prompt for or accept `--api-key`, validate it, and store it locally
+- `npx -y token-oracle-mcp logout`: remove locally stored credentials
 
 ## Capabilities
 

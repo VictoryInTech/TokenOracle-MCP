@@ -19,8 +19,8 @@
       "environmentVariables": [
         {
           "name": "TOKEN_ORACLE_API_KEY",
-          "description": "Hosted API key for TokenOracle",
-          "isRequired": true,
+          "description": "Optional hosted API key for TokenOracle; not required after bridge login stores credentials locally",
+          "isRequired": false,
           "isSecret": true
         },
         {
