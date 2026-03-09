@@ -3,7 +3,7 @@
   "name": "com.guffeyholdings/token-oracle",
   "title": "TokenOracle",
   "description": "Returns real-time cost estimates and model recommendations for LLM API calls. Compares pricing across OpenAI, Anthropic, Google, and open-source providers. Helps agents optimize spend and stay within budget constraints.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "repository": {
     "url": "https://github.com/VictoryInTech/TokenOracle-MCP",
     "source": "github"
@@ -12,7 +12,7 @@
     {
       "registryType": "npm",
       "identifier": "@guffeyholdings/token-oracle-remote",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "transport": {
         "type": "stdio"
       },

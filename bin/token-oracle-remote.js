@@ -20,7 +20,7 @@ import {
 } from '@modelcontextprotocol/sdk/types.js'
 
 const DEFAULT_REMOTE_URL = 'https://mcp.guffeyholdings.com/TokenOracle'
-const BRIDGE_VERSION = '1.0.0'
+const BRIDGE_VERSION = '1.0.1'
 const FALLBACK_SERVER_NAME = 'com.guffeyholdings/token-oracle'
 
 function parseArgs(argv) {
