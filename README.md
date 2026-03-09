@@ -1,6 +1,6 @@
 # TokenOracle MCP
 
-Token Oracle is a Model Context Protocol (MCP) server that estimates, compares, and controls LLM API costs before agents spend tokens. It exposes five tools, five read-only Resources, and a cost_analysis_workflow Prompt template. All tools are read-only and idempotent — no external LLM API calls are made at query time. Pricing data is sourced from the LiteLLM community dataset (model_prices_and_context_window.json) and cached in-memory with a bundled snapshot fallback.
+Token Oracle is a Model Context Protocol (MCP) server that estimates, compares, and controls LLM API costs before agents spend tokens. It exposes nine tools, four read-only Resources, and a cost_analysis_workflow Prompt template. All tools are read-only and idempotent — no external LLM API calls are made at query time. Pricing data is sourced from the LiteLLM community dataset (model_prices_and_context_window.json) and cached in-memory with a bundled snapshot fallback.
 
 **MCP tools exposed:**
 
@@ -12,7 +12,6 @@ Token Oracle is a Model Context Protocol (MCP) server that estimates, compares, 
 
 **MCP Resources exposed:**
 - `token-oracle://meta` — Machine-readable server capability document (version, model_count, pricing freshness)
-- `token-oracle://pricing` — Full pricing table; agents can cache and compute without repeated tool calls
 - `token-oracle://models` — Model IDs with metadata for discovery and validation
 - `token-oracle://heuristics` — Task-type token heuristics and keyword classifier patterns (auditable)
 - `token-oracle://pricing/changelog` — Append-only log of pricing changes; use to detect stale cached data
@@ -95,7 +94,6 @@ Tools:
 
 Resources:
 - `token-oracle://meta`
-- `token-oracle://pricing`
 - `token-oracle://models`
 - `token-oracle://heuristics`
 - `token-oracle://pricing/changelog`
@@ -107,4 +105,3 @@ Prompts:
 
 - Hosted service version: `1.0.1`
 - Bridge package version: `1.0.1`
-
