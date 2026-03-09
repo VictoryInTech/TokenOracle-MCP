@@ -2,7 +2,7 @@
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "com.guffeyholdings/token-oracle",
   "title": "TokenOracle",
-  "description": "Returns real-time cost estimates and model recommendations for LLM API calls. Compares pricing across OpenAI, Anthropic, Google, and open-source providers. Helps agents optimize spend and stay within budget constraints.",
+  "description": "Hosted MCP server for LLM cost estimation, model comparison, and budget-aware routing.",
   "version": "1.0.1",
   "repository": {
     "url": "https://github.com/VictoryInTech/TokenOracle-MCP",
