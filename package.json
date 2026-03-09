@@ -1,0 +1,37 @@
+{
+  "name": "@guffeyholdings/token-oracle-remote",
+  "version": "1.0.0",
+  "description": "Returns real-time cost estimates and model recommendations for LLM API calls. Compares pricing across OpenAI, Anthropic, Google, and open-source providers. Helps agents optimize spend and stay within budget constraints. Hosted stdio bridge package.",
+  "type": "module",
+  "license": "MIT",
+  "mcpName": "com.guffeyholdings/token-oracle",
+  "files": [
+    "bin/",
+    "README.md",
+    "server.json"
+  ],
+  "bin": {
+    "token-oracle-remote": "bin/token-oracle-remote.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.10.1"
+  },
+  "keywords": [
+    "pricing",
+    "cost",
+    "llm",
+    "budget",
+    "tokens",
+    "optimization",
+    "anthropic",
+    "openai",
+    "google",
+    "mcp"
+  ]
+}
