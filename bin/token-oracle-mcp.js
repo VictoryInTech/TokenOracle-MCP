@@ -79,7 +79,7 @@ async function main() {
   }
 
   const client = new Client(
-    { name: '@guffeyholdings/token-oracle-remote', version: BRIDGE_VERSION },
+    { name: 'token-oracle-mcp', version: BRIDGE_VERSION },
     { capabilities: {} }
   )
   const remoteTransport = new StreamableHTTPClientTransport(new URL(config.remoteUrl), {

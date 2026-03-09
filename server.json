@@ -11,7 +11,7 @@
   "packages": [
     {
       "registryType": "npm",
-      "identifier": "@guffeyholdings/token-oracle-remote",
+      "identifier": "token-oracle-mcp",
       "version": "1.0.1",
       "transport": {
         "type": "stdio"

@@ -1,5 +1,5 @@
 {
-  "name": "@guffeyholdings/token-oracle-remote",
+  "name": "token-oracle-mcp",
   "version": "1.0.1",
   "description": "Returns real-time cost estimates and model recommendations for LLM API calls. Compares pricing across OpenAI, Anthropic, Google, and open-source providers. Helps agents optimize spend and stay within budget constraints. Hosted stdio bridge package.",
   "type": "module",
@@ -11,7 +11,7 @@
     "server.json"
   ],
   "bin": {
-    "token-oracle-remote": "bin/token-oracle-remote.js"
+    "token-oracle-mcp": "bin/token-oracle-mcp.js"
   },
   "engines": {
     "node": ">=20"

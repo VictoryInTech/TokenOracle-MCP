@@ -58,14 +58,14 @@ Direct remote configuration:
 
 ## npm bridge package
 
-For local clients that still expect an npm-installed stdio server, use `@guffeyholdings/token-oracle-remote`.
+For local clients that still expect an npm-installed stdio server, use `token-oracle-mcp`.
 
 ```json
 {
   "mcpServers": {
     "token-oracle": {
       "command": "npx",
-      "args": ["-y", "@guffeyholdings/token-oracle-remote"],
+      "args": ["-y", "token-oracle-mcp"],
       "env": {
         "TOKEN_ORACLE_API_KEY": "${TOKEN_ORACLE_API_KEY}"
       }
