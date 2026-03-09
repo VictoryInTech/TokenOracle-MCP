@@ -1,8 +1,13 @@
 {
-  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-09-17/server.schema.json",
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "com.guffeyholdings/token-oracle",
+  "title": "TokenOracle",
   "description": "Returns real-time cost estimates and model recommendations for LLM API calls. Compares pricing across OpenAI, Anthropic, Google, and open-source providers. Helps agents optimize spend and stay within budget constraints.",
   "version": "1.0.0",
+  "repository": {
+    "url": "https://github.com/VictoryInTech/TokenOracle-MCP",
+    "source": "github"
+  },
   "packages": [
     {
       "registryType": "npm",
@@ -10,34 +15,48 @@
       "version": "1.0.0",
       "transport": {
         "type": "stdio"
-      }
+      },
+      "environmentVariables": [
+        {
+          "name": "TOKEN_ORACLE_API_KEY",
+          "description": "Hosted API key for TokenOracle",
+          "isRequired": true,
+          "isSecret": true
+        },
+        {
+          "name": "TOKEN_ORACLE_BASE_URL",
+          "description": "Optional override for the hosted TokenOracle MCP endpoint",
+          "isRequired": false,
+          "isSecret": false,
+          "default": "https://mcp.guffeyholdings.com/TokenOracle"
+        },
+        {
+          "name": "TOKEN_ORACLE_SUBJECT",
+          "description": "Optional end-user subject forwarded to the hosted service",
+          "isRequired": false,
+          "isSecret": false
+        }
+      ]
     }
   ],
   "remotes": [
     {
       "type": "streamable-http",
-      "url": "https://mcp.guffeyholdings.com/TokenOracle"
-    }
-  ],
-  "environment_variables": [
-    {
-      "name": "TOKEN_ORACLE_API_KEY",
-      "description": "Hosted API key for TokenOracle",
-      "isRequired": true,
-      "isSecret": true
-    },
-    {
-      "name": "TOKEN_ORACLE_BASE_URL",
-      "description": "Optional override for the hosted TokenOracle MCP endpoint",
-      "isRequired": false,
-      "isSecret": false,
-      "default": "https://mcp.guffeyholdings.com/TokenOracle"
-    },
-    {
-      "name": "TOKEN_ORACLE_SUBJECT",
-      "description": "Optional end-user subject forwarded to the hosted service",
-      "isRequired": false,
-      "isSecret": false
+      "url": "https://mcp.guffeyholdings.com/TokenOracle",
+      "headers": [
+        {
+          "name": "X-API-Key",
+          "description": "Hosted API key for TokenOracle",
+          "isRequired": true,
+          "isSecret": true
+        },
+        {
+          "name": "X-Token-Oracle-Subject",
+          "description": "Optional end-user subject forwarded to the hosted service",
+          "isRequired": false,
+          "isSecret": false
+        }
+      ]
     }
   ]
 }
