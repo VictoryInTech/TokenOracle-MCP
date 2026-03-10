@@ -2,8 +2,8 @@
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "com.guffeyholdings/token-oracle",
   "title": "TokenOracle",
-  "description": "Hosted MCP server for LLM cost estimation, model comparison, and budget-aware routing.",
-  "version": "1.0.3",
+  "description": "A little CFO for your Agent Swarm - LLM cost estimation, token budgeting and model choice.",
+  "version": "1.0.4",
   "repository": {
     "url": "https://github.com/VictoryInTech/TokenOracle-MCP",
     "source": "github"
@@ -12,7 +12,7 @@
     {
       "registryType": "npm",
       "identifier": "token-oracle-mcp",
-      "version": "1.0.3",
+      "version": "1.0.4",
       "transport": {
         "type": "stdio"
       },
