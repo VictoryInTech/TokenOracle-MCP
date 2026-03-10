@@ -144,5 +144,5 @@ Prompts:
 
 ## Versioning
 
-- Hosted service version: `1.0.3`
-- Bridge package version: `1.0.3`
+- Hosted service version: `1.0.4`
+- Bridge package version: `1.0.4`
