@@ -1,6 +1,6 @@
 {
   "name": "token-oracle-mcp",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Returns real-time cost estimates and model recommendations for LLM API calls. Compares pricing across OpenAI, Anthropic, Google, and open-source providers. Helps agents optimize spend and stay within budget constraints. Hosted stdio bridge package.",
   "type": "module",
   "license": "MIT",

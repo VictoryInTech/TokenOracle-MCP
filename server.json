@@ -3,7 +3,7 @@
   "name": "com.guffeyholdings/token-oracle",
   "title": "TokenOracle",
   "description": "Hosted MCP server for LLM cost estimation, model comparison, and budget-aware routing.",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "repository": {
     "url": "https://github.com/VictoryInTech/TokenOracle-MCP",
     "source": "github"
@@ -12,7 +12,7 @@
     {
       "registryType": "npm",
       "identifier": "token-oracle-mcp",
-      "version": "1.0.2",
+      "version": "1.0.3",
       "transport": {
         "type": "stdio"
       },

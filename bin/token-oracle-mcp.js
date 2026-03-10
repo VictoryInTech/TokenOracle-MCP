@@ -23,7 +23,7 @@ import {
 } from '@modelcontextprotocol/sdk/types.js'
 
 const DEFAULT_REMOTE_URL = 'https://mcp.guffeyholdings.com/TokenOracle'
-const BRIDGE_VERSION = '1.0.2'
+const BRIDGE_VERSION = '1.0.3'
 const FALLBACK_SERVER_NAME = 'com.guffeyholdings/token-oracle'
 const BRIDGE_PACKAGE_NAME = 'token-oracle-mcp'
 const CREDENTIALS_FILE_NAME = 'credentials.json'
@@ -68,12 +68,12 @@ function printHelp() {
       `Usage: ${BRIDGE_PACKAGE_NAME} [login|logout] [--api-key <key>] [--url <url>] [--subject <subject>]`,
       '',
       'Commands:',
-      '  login   Validate and store credentials for future bridge launches',
+      '  login   Store a paid API key or fetch a hosted trial credential for future bridge launches',
       '  logout  Remove stored local credentials',
       '',
       'Default behavior:',
       '  Starts the stdio bridge and forwards MCP traffic to the hosted TokenOracle endpoint.',
-      '  Credential lookup order: --api-key, TOKEN_ORACLE_API_KEY, stored credentials.',
+      '  Credential lookup order: --api-key, TOKEN_ORACLE_API_KEY, stored credentials, hosted trial issuance.',
     ].join('\n') + '\n'
   )
 }
@@ -136,18 +136,45 @@ async function deleteStoredCredentials() {
   return credentialsPath
 }
 
+function buildTrialIssueUrl(remoteUrl) {
+  const normalized = remoteUrl.endsWith('/') ? remoteUrl.slice(0, -1) : remoteUrl
+  return new URL(`${normalized}/trial/issue`)
+}
+
 function buildConfig(args, storedCredentials) {
   const apiKey = args.apiKey ?? process.env['TOKEN_ORACLE_API_KEY'] ?? storedCredentials?.apiKey
   if (!apiKey) {
-    throw new Error(
-      `TOKEN_ORACLE_API_KEY or --api-key is required. Run \`npx -y ${BRIDGE_PACKAGE_NAME} login\` to store one locally.`
-    )
+    throw new Error('NO_API_KEY_CONFIGURED')
   }
 
   return {
     apiKey,
     remoteUrl: args.url ?? process.env['TOKEN_ORACLE_BASE_URL'] ?? storedCredentials?.remoteUrl ?? DEFAULT_REMOTE_URL,
     subject: args.subject ?? process.env['TOKEN_ORACLE_SUBJECT'] ?? storedCredentials?.subject,
+  }
+}
+
+async function issueTrialCredentials({ remoteUrl, subject }) {
+  const response = await fetch(buildTrialIssueUrl(remoteUrl), {
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json',
+      ...(subject ? { 'X-Token-Oracle-Subject': subject } : {}),
+    },
+    body: JSON.stringify({}),
+  })
+
+  const payload = await response.json().catch(() => ({}))
+  if (!response.ok || typeof payload.api_key !== 'string') {
+    throw new Error(payload.error ?? `Trial issuance failed with ${response.status}`)
+  }
+
+  return {
+    apiKey: payload.api_key,
+    remoteUrl,
+    subject,
+    plan: payload.plan,
+    requestLimit: payload.request_limit,
   }
 }
 
@@ -235,19 +262,22 @@ async function validateCredentials(config) {
 
 async function login(args) {
   const storedCredentials = await readStoredCredentials()
-  const config = buildConfig(
-    {
-      ...args,
-      apiKey: args.apiKey ?? (args.apiKey === undefined && !storedCredentials && isInteractiveTerminal()
-        ? await promptSecret('TokenOracle API key: ')
-        : undefined),
-    },
-    storedCredentials
-  )
+  let config
+
+  if (args.apiKey || process.env['TOKEN_ORACLE_API_KEY']) {
+    config = buildConfig(args, storedCredentials)
+  } else {
+    config = await issueTrialCredentials({
+      remoteUrl: args.url ?? process.env['TOKEN_ORACLE_BASE_URL'] ?? storedCredentials?.remoteUrl ?? DEFAULT_REMOTE_URL,
+      subject: args.subject ?? process.env['TOKEN_ORACLE_SUBJECT'] ?? storedCredentials?.subject,
+    })
+  }
 
   await validateCredentials(config)
   const credentialsPath = await writeStoredCredentials(config)
-  process.stdout.write(`Stored TokenOracle credentials in ${credentialsPath}\n`)
+  process.stdout.write(
+    `Stored TokenOracle ${config.plan === 'trial' ? 'trial' : 'hosted'} credentials in ${credentialsPath}\n`
+  )
 }
 
 async function logout() {
@@ -279,13 +309,23 @@ async function main() {
   try {
     config = buildConfig(args, storedCredentials)
   } catch (error) {
-    if (!storedCredentials && isInteractiveTerminal()) {
+    if (String(error) === 'Error: NO_API_KEY_CONFIGURED') {
+      config = await issueTrialCredentials({
+        remoteUrl: args.url ?? process.env['TOKEN_ORACLE_BASE_URL'] ?? storedCredentials?.remoteUrl ?? DEFAULT_REMOTE_URL,
+        subject: args.subject ?? process.env['TOKEN_ORACLE_SUBJECT'] ?? storedCredentials?.subject,
+      })
+      await validateCredentials(config)
+      await writeStoredCredentials(config)
+      process.stderr.write(
+        JSON.stringify({ level: 'info', msg: 'stored TokenOracle trial credentials after automatic first-run issuance' }) + '\n'
+      )
+    } else if (!storedCredentials && isInteractiveTerminal()) {
       const promptedApiKey = await promptSecret('TokenOracle API key: ')
       config = buildConfig({ ...args, apiKey: promptedApiKey }, storedCredentials)
       await validateCredentials(config)
       await writeStoredCredentials(config)
       process.stderr.write(
-        JSON.stringify({ level: 'info', msg: 'stored TokenOracle credentials after interactive first-run login' }) + '\n'
+        JSON.stringify({ level: 'info', msg: 'stored TokenOracle hosted credentials after interactive login' }) + '\n'
       )
     } else {
       throw error

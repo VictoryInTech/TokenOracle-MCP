@@ -65,13 +65,28 @@ Direct remote configuration:
 
 For local clients that still expect an npm-installed stdio server, use `token-oracle-mcp`.
 
-One-time login flow:
+Zero-input trial flow:
+
+Start the bridge with no API key and, when the hosted service has trial auth enabled, it will automatically fetch and store a metered trial credential on first launch.
+
+```json
+{
+  "mcpServers": {
+    "token-oracle": {
+      "command": "npx",
+      "args": ["-y", "token-oracle-mcp"]
+    }
+  }
+}
+```
+
+One-time explicit login flow:
 
 ```bash
 npx -y token-oracle-mcp login
 ```
 
-That validates your hosted API key and stores it locally for later bridge launches. After login, the MCP config does not need to inject `TOKEN_ORACLE_API_KEY`.
+With `--api-key`, that validates and stores a paid hosted API key. Without `--api-key`, it requests and stores a hosted trial credential instead. After either flow, the MCP config does not need to inject `TOKEN_ORACLE_API_KEY`.
 
 ```json
 {
@@ -86,6 +101,14 @@ That validates your hosted API key and stores it locally for later bridge launch
 
 If you prefer stateless setup, keep passing `TOKEN_ORACLE_API_KEY` as an environment variable instead.
 
+Hosted trial behavior:
+
+- Trial credentials are metered and capped server-side
+- Once the hosted trial request limit is reached, the service returns an upgrade-required response
+- The hosted service reuses the same still-valid trial credential for the same claimant instead of minting a fresh token each time
+- Trial issuance is separately throttled and can be blocked by server-side abuse risk scoring
+- Later, a hosted upgrade flow can replace the stored trial credential with a paid credential without changing MCP config
+
 Optional bridge environment variables:
 
 - `TOKEN_ORACLE_API_KEY`: optional hosted API key; overrides any stored credential
@@ -94,7 +117,7 @@ Optional bridge environment variables:
 
 Additional bridge commands:
 
-- `npx -y token-oracle-mcp login`: prompt for or accept `--api-key`, validate it, and store it locally
+- `npx -y token-oracle-mcp login`: accept `--api-key` for paid auth, or fetch a hosted trial credential when no key is supplied
 - `npx -y token-oracle-mcp logout`: remove locally stored credentials
 
 ## Capabilities
@@ -121,5 +144,5 @@ Prompts:
 
 ## Versioning
 
-- Hosted service version: `1.0.2`
-- Bridge package version: `1.0.2`
+- Hosted service version: `1.0.3`
+- Bridge package version: `1.0.3`
