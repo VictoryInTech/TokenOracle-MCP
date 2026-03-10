@@ -35,7 +35,7 @@ Goal: Run 500 product description generation tasks. Budget $50/mo, current spend
 Decision: Use deepseek-v3. Save $0.425 vs gpt-4o-mini.
 
 **Pricing:**
-- Free: 100 API calls/day, all hosted tools via the remote endpoint, no credit card
+- Free: 1000 API calls/day, all hosted tools via the remote endpoint, no credit card
 - Pro ($29/mo): Unlimited calls, track_spend tool (persisted cost ledger per API key), priority throughput, spend attribution per agent/task/session
 
 **Contact:** info@guffeyholdings.com
@@ -144,5 +144,5 @@ Prompts:
 
 ## Versioning
 
-- Hosted service version: `1.0.4`
-- Bridge package version: `1.0.4`
+- Hosted service version: `1.0.5`
+- Bridge package version: `1.0.5`
