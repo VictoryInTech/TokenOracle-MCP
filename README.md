@@ -10,17 +10,17 @@ Save them tokens, call Token Oracle today!
 
 **MCP tools exposed:**
 
-- `estimate_cost` — Estimates the USD cost of a single LLM API call before execution. Input: task_description, prompt_text, task_type, or explicit token_count. Output: cost_usd, recommended_model, confidence, will_fit_context, pricing_stale. Annotations: readOnlyHint:true, idempotentHint:true, openWorldHint:false.
+- `estimate_cost` — Estimates the USD cost of a single LLM API call before execution. Input: task_description, prompt_text, task_type, or explicit token_count. Output: cost_usd, recommended_model, confidence, will_fit_context, pricing_updated. Annotations: readOnlyHint:true, idempotentHint:true, openWorldHint:false.
 - `estimate_cost_batch` — Prices up to 100 LLM tasks in a single call. Returns per-task breakdown, total_cost_usd, and cheapest_model_for_all. Use before starting any multi-step pipeline.
 - `compare_models` — Ranks LLM pricing across all supported providers for a given task. Returns models sorted by cost with speed_tier and quality_tier. Supports filtering by min_quality, max_cost_usd, and provider. Input: task_type, token_count, or prompt_text.
 - `budget_check` — Checks whether a planned task fits within a monthly budget. Returns can_proceed (boolean), remaining_budget_usd, budget_consumed_pct, and cheaper_alternatives with savings_pct. Input: monthly_budget_usd, current_spend_usd, and task description.
 - `find_cheapest_for_budget` — Inverse of budget_check. Given a budget_usd cap and task, returns the best model/quality combination within budget plus all alternatives ranked by quality then cost.
 
 **MCP Resources exposed:**
-- `token-oracle://meta` — Machine-readable server capability document (version, model_count, pricing freshness)
+- `token-oracle://meta` — Machine-readable server capability document (version, model_count, pricing metadata)
 - `token-oracle://models` — Model IDs with metadata for discovery and validation
 - `token-oracle://heuristics` — Task-type token heuristics and keyword classifier patterns (auditable)
-- `token-oracle://pricing/changelog` — Append-only log of pricing changes; use to detect stale cached data
+- `token-oracle://pricing/changelog` — Append-only log of pricing changes; use to detect pricing updates over time
 
 **MCP Prompt exposed:**
 - `cost_analysis_workflow` — Guided three-step prompt template: estimate_cost → compare_models → budget_check. Arguments: task_description, monthly_budget_usd (optional), quality_threshold (optional).
