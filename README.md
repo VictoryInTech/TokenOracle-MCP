@@ -1,3 +1,5 @@
+THIS REPO IS ARCHIVED AND THE SERVICE HAS BEEN SHUTDOWN
+
 # TokenOracle MCP
 
 Token Oracle is a Model Context Protocol (MCP) server that estimates, compares, and controls LLM API costs before agents spend tokens. It exposes nine tools, four read-only Resources, and a cost_analysis_workflow Prompt template. It uses a proprietary pricing algorithm without a backing LLM to ensure deterministic budget workflows. 
